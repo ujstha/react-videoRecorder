@@ -2,9 +2,13 @@
   "name": "video",
   "version": "0.1.0",
   "private": true,
+  "main": "server.js",
   "dependencies": {
     "@material-ui/core": "^4.4.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
     "material-ui": "^0.20.2",
+    "multer": "^1.4.2",
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
@@ -16,7 +20,12 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postinstall": "react-scripts build"
+  },
+  "engines": {
+    "node": "~10.16.3",
+    "npm": "~6.11.2"
   },
   "eslintConfig": {
     "extends": "react-app"
