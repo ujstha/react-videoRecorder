@@ -1,5 +1,6 @@
 var express = require("express");
 const path = require("path");
+const http = require("http");
 const app = express();
 const port = process.env.PORT || '8000';
 
@@ -29,6 +30,6 @@ app.get("/", (req, res) => {
   res.send("hello people");
 });
 
-app.listen(port, () => {
-  console.log("listening to the port: " + port);
-});
+http.createServer(() => {
+  console.log("listening to the port: " + port)
+}).listen(port);

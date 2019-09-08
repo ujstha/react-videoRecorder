@@ -167,7 +167,7 @@ class VideoRecorder extends React.Component {
 
   submitVideo = (video) => {
     //console.log(video, 'video');
-    var url = 'https://localhost:5000/single';
+    var url = window.location.href+'single';
     const formData = new FormData();
     formData.append('profile', video, uuid() + '.mp4');
 
