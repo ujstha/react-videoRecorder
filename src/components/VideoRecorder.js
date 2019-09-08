@@ -6,7 +6,7 @@ import { Card, CardActionArea, CardActions, Button } from '@material-ui/core';
 import { Alert, Modal, ModalBody } from 'reactstrap';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
-import { Player, ControlBar } from 'video-react';
+import { Player, ControlBar, ForwardControl } from 'video-react';
 import '../App.css';
 
 const styles = theme =>({
@@ -103,6 +103,10 @@ class VideoRecorder extends React.Component {
           >
             Submit
           </Button>
+          <a className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge" tabIndex="0" type="button" href={this.state.videoURL} download={uuid()+".mp4"}>
+            <span className="MuiButton-label">Download</span>
+            <span className="MuiTouchRipple-root"></span>
+          </a>
         </div>
       );
     } 
@@ -137,7 +141,9 @@ class VideoRecorder extends React.Component {
         <CardActionArea>
           <Player>
             <source src={this.state.videoURL} />
-            <ControlBar autoHide={true} />
+            <ControlBar autoHide={true}>
+              <ForwardControl seconds={5} order={3.1} />
+            </ControlBar>
           </Player>
         </CardActionArea>
       )
@@ -161,7 +167,7 @@ class VideoRecorder extends React.Component {
 
   submitVideo = (video) => {
     //console.log(video, 'video');
-    var url = 'http://localhost:8000/single';
+    var url = window.location.href+'single';
     const formData = new FormData();
     formData.append('profile', video, uuid() + '.mp4');
 
@@ -174,7 +180,9 @@ class VideoRecorder extends React.Component {
         visible: true, 
         alertColor: 'success', 
         alertMessage: 'CONGRATS! Your video has been uploaded.',
-        alertIcon: <CheckCircleIcon />
+        alertIcon: <CheckCircleIcon />,
+        canSend: false,
+        videoURL: null
       })
       this.initiateRecording();
     }).catch(err => {
@@ -182,10 +190,21 @@ class VideoRecorder extends React.Component {
         visible: true, 
         alertColor: 'danger', 
         alertMessage: 'OOPS! Your video was not uploaded.',
-        alertIcon: <ErrorIcon />
+        alertIcon: <ErrorIcon />,
+        canSend: true,
+        videoURL: this.state.videoURL
       })
+      return (
+        <CardActionArea>
+          <Player>
+            <source src={this.state.videoURL} />
+            <ControlBar autoHide={true}>
+              <ForwardControl seconds={5} order={3.1} />
+            </ControlBar>
+          </Player>
+        </CardActionArea>
+      )
     });
-    this.setState({ canSend: false, videoURL: null });
   }
 
   onDismiss = () => {

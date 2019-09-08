@@ -37,4 +37,11 @@
   .modal {
     margin-top: 60%;
   }
+  .MuiCardActions-root .MuiButtonBase-root, .MuiCardActions-root .MuiButtonBase-root:focus {
+    width: 100%;
+    margin: .5rem 0;
+    border-radius: 0;
+    background-color: rgba(0,0,0,.2);
+    color: #fff;
+  }
 }
