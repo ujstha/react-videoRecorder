@@ -36,6 +36,9 @@ class VideoRecorder extends React.Component {
 
   componentDidMount() {
     this.initiateRecording();
+    if (window.location.protocol === 'http:' && window.location.hostname !== 'localhost') {
+      window.location.protocol = 'https:';
+    }
   }
 
   initiateRecording = async () => {
