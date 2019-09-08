@@ -230,6 +230,7 @@ class VideoRecorder extends React.Component {
                 <Alert color={this.state.alertColor} isOpen={this.state.visible} toggle={this.onDismiss}>
                   {this.state.alertIcon}
                   {this.state.alertMessage}
+                  {console.log(process.env.PORT, 'port')}
                 </Alert>
               </ModalBody>
             </Modal>
