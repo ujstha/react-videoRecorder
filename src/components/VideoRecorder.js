@@ -234,6 +234,8 @@ class VideoRecorder extends React.Component {
               </ModalBody>
             </Modal>
           </Card>
+          {window.location.href} = href<br />
+          {window.location.protocol} = protocol
           {/*console.log(videoURL, 'yaha tala')*/}
         </div>
       </div>
