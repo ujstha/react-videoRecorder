@@ -1,3 +1,6 @@
+.MuiButton-root {
+  font-family: 'Montserrat', sans-serif;
+}
 .modal {
   border-radius: 0;
   margin: 20% 0;
@@ -33,6 +36,12 @@
   font-size: 2rem;
   padding: .50rem 1.25rem;
 }
+.MuiCardActions-root .MuiButtonBase-root, .MuiCardActions-root .MuiButtonBase-root:focus {
+  margin: .5rem .5rem;
+  border-radius: 0;
+  border: 1px solid #3f51b5;
+  font-family: 'Montserrat', sans-serif;
+}
 @media only screen and (max-width: 1024px) {
   .modal {
     margin-top: 60%;
@@ -40,8 +49,5 @@
   .MuiCardActions-root .MuiButtonBase-root, .MuiCardActions-root .MuiButtonBase-root:focus {
     width: 100%;
     margin: .5rem 0;
-    border-radius: 0;
-    background-color: rgba(0,0,0,.2);
-    color: #fff;
   }
 }
