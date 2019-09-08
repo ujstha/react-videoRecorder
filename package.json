@@ -5,6 +5,7 @@
   "main": "server.js",
   "dependencies": {
     "@material-ui/core": "^4.4.0",
+    "@material-ui/icons": "^4.4.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "material-ui": "^0.20.2",
@@ -14,6 +15,7 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-scripts": "3.1.1",
+    "reactstrap": "^8.0.1",
     "uuid": "^3.3.3",
     "video-react": "^0.14.1"
   },

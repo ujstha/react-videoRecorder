@@ -2,11 +2,12 @@
 import React from 'react';
 import uuid from 'uuid';
 import { withStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import Button from '@material-ui/core/Button';
+import { Card, CardActionArea, CardActions, Button } from '@material-ui/core';
+import { Alert, Modal, ModalBody } from 'reactstrap';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
 import { Player, ControlBar } from 'video-react';
+import '../App.css';
 
 const styles = theme =>({
   card: {
@@ -23,8 +24,14 @@ class VideoRecorder extends React.Component {
       recording: false,
       canSend: false,
       videoURL: null,
+      visible: false,
+      backdrop: 'static',
+      alertColor: '',
+      alertMessage: '',
+      alertIcon: ''
       /*videos: []*/
     };
+    this.onDismiss = this.onDismiss.bind(this);
   }
 
   componentDidMount() {
@@ -124,20 +131,6 @@ class VideoRecorder extends React.Component {
     //console.log(videoURL, 'vidURL');
   }
 
-  submitVideo = (video) => {
-    //console.log(video, 'video');
-    var url = 'http://localhost:8000/single';
-    const formData = new FormData();
-    formData.append('profile', video, uuid() + '.mp4');
-
-    fetch(url, {
-      method: 'POST', // or 'PUT'
-      mode: 'no-cors',
-      body: formData
-    });
-    this.setState({ canSend: false });
-  }
-
   videoDisplay = () => {
     if (this.state.videoURL != null) {
       return (
@@ -166,6 +159,41 @@ class VideoRecorder extends React.Component {
     }
   }
 
+  submitVideo = (video) => {
+    //console.log(video, 'video');
+    var url = 'http://localhost:8000/single';
+    const formData = new FormData();
+    formData.append('profile', video, uuid() + '.mp4');
+
+    fetch(url, {
+      method: 'POST', // or 'PUT'
+      mode: 'no-cors',
+      body: formData
+    }).then(res => {
+      this.setState({ 
+        visible: true, 
+        alertColor: 'success', 
+        alertMessage: 'CONGRATS! Your video has been uploaded.',
+        alertIcon: <CheckCircleIcon />
+      })
+      this.initiateRecording();
+    }).catch(err => {
+      this.setState({ 
+        visible: true, 
+        alertColor: 'danger', 
+        alertMessage: 'OOPS! Your video was not uploaded.',
+        alertIcon: <ErrorIcon />
+      })
+    });
+    this.setState({ canSend: false, videoURL: null });
+  }
+
+  onDismiss = () => {
+    this.setState({ 
+      visible: false
+    });
+  }
+
   render() {
     //const { recording, videoURL } = this.state;
     const { classes } = this.props;
@@ -178,8 +206,16 @@ class VideoRecorder extends React.Component {
             <CardActions>
               {this.displayButton()}
             </CardActions>
+            <Modal className="modal-lg" isOpen={this.state.visible} toggle={this.onDismiss} backdrop={this.state.backdrop}>
+              <ModalBody>
+                <Alert color={this.state.alertColor} isOpen={this.state.visible} toggle={this.onDismiss}>
+                  {this.state.alertIcon}
+                  {this.state.alertMessage}
+                </Alert>
+              </ModalBody>
+            </Modal>
           </Card>
-        {/*console.log(videoURL, 'yaha tala')*/}
+          {/*console.log(videoURL, 'yaha tala')*/}
         </div>
       </div>
     );
