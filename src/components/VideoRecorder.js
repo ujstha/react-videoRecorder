@@ -15,7 +15,8 @@ const styles = theme =>({
   },
 });
 
-const videoType = 'video/webm';
+//const videoType = 'video/webm'; --if using mimetype in MediaRecorder
+const videoType = 'video/mp4';
 
 class VideoRecorder extends React.Component {
   constructor(props) {
@@ -50,9 +51,9 @@ class VideoRecorder extends React.Component {
     this.video.srcObject = stream;
     this.video.play();
     // init recording
-    this.mediaRecorder = new MediaRecorder(stream, {
+    this.mediaRecorder = new MediaRecorder(stream/*, {
       mimeType: videoType
-    });
+    }*/);
     // init data storage for video chunks
     this.chunks = [];
     // listen for data from media recorder
@@ -86,6 +87,70 @@ class VideoRecorder extends React.Component {
   restartRecording = () => {
     this.initiateRecording();
     this.setState({ recording: false, videoURL: null, canSend: false });
+  }
+
+  saveVideo = () => {
+    // convert saved chunks to blob
+    const blob = new Blob(this.chunks, {type: videoType});
+    // generate video url from blob
+    const videoURL = window.URL.createObjectURL(blob);
+    // append videoURL to list of saved videos for rendering
+    //const videos = this.state.videos.concat([videoURL]);
+    this.setState({ video: blob });
+    this.setState({ videoURL });
+    //console.log(videoURL, 'vidURL');
+    /*  convert blob to base64
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'blob';
+
+    xhr.onload = () => {
+      var recoveredBlob = xhr.response;
+
+      var reader = new FileReader();
+
+      reader.onload = () => {
+        var blobAsDataUrl = reader.result;
+        this.setState({ videoURL: blobAsDataUrl });
+        console.log(blobAsDataUrl.type, 'bloburi');
+        console.log(this.state.videoURL);
+      };
+
+      reader.readAsDataURL(recoveredBlob);
+    };
+
+    xhr.open('GET', videoURL);
+    xhr.send();
+    */
+  }
+  
+  videoDisplay = () => {
+    if (this.state.videoURL != null) {
+      return (
+        <CardActionArea>
+          <Player>
+            <source src={this.state.videoURL} type="video/mp4" />
+            <ControlBar autoHide={true}>
+              <ForwardControl seconds={5} order={3.1} />
+            </ControlBar>
+          </Player>
+        </CardActionArea>
+      )
+    } 
+    else if (this.state.videoURL == null) {
+      return(
+        <CardActionArea>
+          <video
+            style={{width: '100%', height: '400'}}
+            ref={v => {
+              this.video = v;
+            }}
+            muted
+          >
+            Video stream not available.
+          </video>
+        </CardActionArea>
+      )
+    }
   }
 
   displayButton = () => {
@@ -122,48 +187,6 @@ class VideoRecorder extends React.Component {
           <Button size="large" color="primary" onClick={e => this.stopRecording(e)}>
             Stop Recording
           </Button>
-      )
-    }
-  }
-
-  saveVideo = () => {
-    // convert saved chunks to blob
-    const blob = new Blob(this.chunks, {type: videoType});
-    // generate video url from blob
-    const videoURL = window.URL.createObjectURL(blob);
-    // append videoURL to list of saved videos for rendering
-    //const videos = this.state.videos.concat([videoURL]);
-    this.setState({ video: blob });
-    this.setState({ videoURL });
-    //console.log(videoURL, 'vidURL');
-  }
-
-  videoDisplay = () => {
-    if (this.state.videoURL != null) {
-      return (
-        <CardActionArea>
-          <Player>
-            <source src={this.state.videoURL} />
-            <ControlBar autoHide={true}>
-              <ForwardControl seconds={5} order={3.1} />
-            </ControlBar>
-          </Player>
-        </CardActionArea>
-      )
-    } 
-    else if (this.state.videoURL == null) {
-      return(
-        <CardActionArea>
-          <video
-            style={{width: '100%', height: '400'}}
-            ref={v => {
-              this.video = v;
-            }}
-            muted
-          >
-            Video stream not available.
-          </video>
-        </CardActionArea>
       )
     }
   }
